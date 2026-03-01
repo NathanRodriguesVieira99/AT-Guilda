@@ -19,8 +19,6 @@ public class BuscaAventureiroPorNomeService {
 
   public List<Aventureiro> exec(String nome, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
-    return aventureiroRepository.findAll(pageable).getContent().stream()
-        .filter(a -> a.getNome().toLowerCase().contains(nome.toLowerCase()))
-        .toList();
+    return aventureiroRepository.findByNomeContaining(nome, pageable).getContent();
   }
 }
