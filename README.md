@@ -584,7 +584,7 @@ GET /api/missoes?page=0&size=10
 
 ### 1️⃣2️⃣ Detalhes de uma missão
 
-Retorna informações completas de uma missão.
+Retorna informações completas de uma missão incluindo todos os participantes.
 
 |             |                                         |
 | ----------- | --------------------------------------- |
@@ -607,7 +607,25 @@ GET /api/missoes/1/detalhes
   "id": 1,
   "titulo": "Explorar a Caverna Escura",
   "status": "CONCLUIDA",
-  "nivelPerigo": "ALTO"
+  "nivelPerigo": "ALTO",
+  "dataInicio": "2026-01-15T10:00:00Z",
+  "dataTermino": "2026-01-20T18:00:00Z",
+  "participantes": [
+    {
+      "aventureiroId": 1,
+      "nomeAventureiro": "Filipe",
+      "papel": "LIDER",
+      "recompensaOuro": 500.00,
+      "destaque": true
+    },
+    {
+      "aventureiroId": 2,
+      "nomeAventureiro": "Maria",
+      "papel": "MEMBRO",
+      "recompensaOuro": 300.00,
+      "destaque": false
+    }
+  ]
 }
 ```
 
@@ -804,6 +822,8 @@ src/main/java/com/edu/infnet/tp1/
     │   ├── AventureiroDetalhesDto.java
     │   ├── MissaoFiltroDto.java
     │   ├── MissaoResponseDto.java
+    │   ├── MissaoDetalhesDto.java
+    │   ├── ParticipanteDto.java
     │   ├── RankingParticipacaoDto.java
     │   ├── RelatorioMissaoDto.java
     │   ├── CompanheiroResponseDto.java
