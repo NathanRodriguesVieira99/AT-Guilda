@@ -1,11 +1,9 @@
-package com.edu.infnet.tp1.services;
-
-import java.util.UUID;
+package com.edu.infnet.tp1.services.aventura;
 
 import org.springframework.stereotype.Service;
 
-import com.edu.infnet.tp1.data.AventureiroData;
-import com.edu.infnet.tp1.models.Aventureiro;
+import com.edu.infnet.tp1.models.aventura.Aventureiro;
+import com.edu.infnet.tp1.repositories.aventura.AventureiroRepository;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroInvalidParamsException;
 
 import lombok.RequiredArgsConstructor;
@@ -14,12 +12,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RegistrarAventureiroService {
 
-  private final AventureiroData aventureiroData;
+  private final AventureiroRepository aventureiroRepository;
 
   public Aventureiro exec(Aventureiro aventureiro) {
-    if (aventureiro.getId() == null)
-      aventureiro.setId(UUID.randomUUID());
-
     if (aventureiro.getNome() == null || aventureiro.getNome().isBlank())
       throw new AventureiroInvalidParamsException();
 
@@ -29,12 +24,15 @@ public class RegistrarAventureiroService {
     if (aventureiro.getNivel() == null || aventureiro.getNivel() <= 0)
       throw new AventureiroInvalidParamsException();
 
-    if (aventureiro.getAtivo() == null || aventureiro.getAtivo() == false)
-      aventureiro.setAtivo(true);
+    if (aventureiro.getOrganizacao() == null)
+      throw new AventureiroInvalidParamsException();
 
-    // força o campo 'companheiro' a ser vazio
+    if (aventureiro.getUsuarioCadastro() == null)
+      throw new AventureiroInvalidParamsException();
+
+    aventureiro.setAtivo(true);
     aventureiro.setCompanheiro(null);
 
-    return aventureiroData.registrar(aventureiro);
+    return aventureiroRepository.save(aventureiro);
   }
 }
