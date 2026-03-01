@@ -1,4 +1,4 @@
-package com.edu.infnet.tp1.controllers;
+package com.edu.infnet.tp1.controllers.aventura;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.infnet.tp1.models.Aventureiro;
-import com.edu.infnet.tp1.services.RegistrarAventureiroService;
+import com.edu.infnet.tp1.models.aventura.Aventureiro;
+import com.edu.infnet.tp1.services.aventura.RegistrarAventureiroService;
 
 import lombok.RequiredArgsConstructor;
 
