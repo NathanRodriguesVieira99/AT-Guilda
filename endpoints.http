@@ -14,8 +14,15 @@ Content-Type: application/json
 {
   "nome": "Pica Pau",
   "classe": "LADINO",
-  "nivel":10 ,
-  "companheiro": null
+  "nivel": 10,
+  "organizacao": {
+    "id": 1,
+    "ativo": true,
+    "nome": "al-qaeda"
+  },
+  "usuarioCadastro": {
+    "id": 1
+  }
 }
 
 ###
@@ -27,8 +34,8 @@ GET {{BASE_URL}}/aventureiros/{{ID}}
 
 # @name Listar_Aventureiros
 # Query Params 👇
-# ?page=0&size=10&classe=MAGO&ativo=true&nivel=1
-GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=GUERREIRO&ativo=true&nivelMinimo=1
+# ?page=0&size=10&classe=LADINO&ativo=true&nivelMinimo=1
+GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=LADINO&ativo=true&nivelMinimo=1
 
 ###
 
@@ -68,3 +75,34 @@ PATCH {{BASE_URL}}/aventureiros/guilda/remove/{{ID}}
 
 # @name Recrutar_Novamente
 PATCH {{BASE_URL}}/aventureiros/guilda/recruit/{{ID}}
+
+###
+
+# @name Buscar_Aventureiro_Por_Nome
+GET {{BASE_URL}}/aventureiros/buscar?nome=Pica&page=0&size=10
+
+###
+
+# @name Detalhes_Aventureiro
+GET {{BASE_URL}}/aventureiros/{{ID}}/detalhes
+
+###
+
+# @name Listar_Missoes
+GET {{BASE_URL}}/missoes?page=0&size=10
+
+###
+
+# @name Detalhes_Missao
+GET {{BASE_URL}}/missoes/1/detalhes
+
+###
+
+# @name Ranking_Participacao
+GET {{BASE_URL}}/aventureiros/ranking
+
+###
+
+# @name Relatorio_Missoes
+GET {{BASE_URL}}/missoes/relatorio
+
