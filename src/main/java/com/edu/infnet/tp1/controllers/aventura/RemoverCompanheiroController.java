@@ -1,6 +1,4 @@
-package com.edu.infnet.tp1.controllers;
-
-import java.util.UUID;
+package com.edu.infnet.tp1.controllers.aventura;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.infnet.tp1.models.Aventureiro;
-import com.edu.infnet.tp1.services.RemoverCompanheiroService;
+import com.edu.infnet.tp1.models.aventura.Aventureiro;
+import com.edu.infnet.tp1.services.aventura.RemoverCompanheiroService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RemoverCompanheiroController {
 
- private final RemoverCompanheiroService removerCompanheiroService;
+  private final RemoverCompanheiroService removerCompanheiroService;
 
   @DeleteMapping("/delete/{id}")
 
-  public ResponseEntity<Aventureiro> removerCompanheiro(@PathVariable UUID id) {
+  public ResponseEntity<Aventureiro> removerCompanheiro(@PathVariable Long id) {
     Aventureiro aventureiroComCompanheiroEncontrado = removerCompanheiroService.exec(id);
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(aventureiroComCompanheiroEncontrado);

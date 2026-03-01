@@ -1,6 +1,4 @@
-package com.edu.infnet.tp1.controllers;
-
-import java.util.UUID;
+package com.edu.infnet.tp1.controllers.aventura;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.infnet.tp1.models.Aventureiro;
-import com.edu.infnet.tp1.services.RecrutarNovamenteService;
+import com.edu.infnet.tp1.models.aventura.Aventureiro;
+import com.edu.infnet.tp1.services.aventura.RecrutarNovamenteService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +20,7 @@ public class RecrutarNovamenteController {
   private final RecrutarNovamenteService recrutarNovamenteService;
 
   @PatchMapping("/recruit/{id}")
-  public ResponseEntity<?> encerrarVinculoGuilda(@PathVariable UUID id) {
+  public ResponseEntity<?> encerrarVinculoGuilda(@PathVariable Long id) {
     Aventureiro aventureiroInativo = recrutarNovamenteService.exec(id);
 
     return ResponseEntity.status(HttpStatus.OK).body(aventureiroInativo);

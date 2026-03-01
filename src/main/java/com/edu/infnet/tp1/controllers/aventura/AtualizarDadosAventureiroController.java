@@ -1,6 +1,4 @@
-package com.edu.infnet.tp1.controllers;
-
-import java.util.UUID;
+package com.edu.infnet.tp1.controllers.aventura;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -9,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.infnet.tp1.models.Aventureiro;
-import com.edu.infnet.tp1.services.AtualizarDadosAventureiroService;
+import com.edu.infnet.tp1.models.aventura.Aventureiro;
+import com.edu.infnet.tp1.services.aventura.AtualizarDadosAventureiroService;
 import com.edu.infnet.tp1.shared.dtos.AtualizarAventureiroRequestDto;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,7 @@ public class AtualizarDadosAventureiroController {
 
   @PatchMapping("/{id}")
   public ResponseEntity<?> atualizarDadosAventureiro(
-      @PathVariable UUID id,
+      @PathVariable Long id,
       @RequestBody AtualizarAventureiroRequestDto aventureiroAtualizado) {
 
     Aventureiro resultado = atualizarDadosAventureiroService.exec(id, aventureiroAtualizado);
