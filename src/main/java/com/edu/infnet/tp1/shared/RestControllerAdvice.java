@@ -11,6 +11,7 @@ import com.edu.infnet.tp1.shared.exceptions.AventureiroInvalidParamsException;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroNotFoundException;
 import com.edu.infnet.tp1.shared.exceptions.CompanheiroInvalidParamsException;
 import com.edu.infnet.tp1.shared.exceptions.InvalidQueryParamException;
+import com.edu.infnet.tp1.shared.exceptions.MissaoNotFoundException;
 
 // @ControllerAdvice -> Serve para padronizar as Exceptions para evitar TryCatch  nos controllers
 // Se não houver exceptions customizadas no service, o controller vai lancar a padrão do Java
@@ -42,5 +43,11 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
         "O Companheiro foi criado com parametros inválidos.");
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
+  }
+
+  @ExceptionHandler(MissaoNotFoundException.class)
+  private ResponseEntity<ErrorMessage> missaoNotFoundException(MissaoNotFoundException exception) {
+    ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND, "A missão não foi encontrada.");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
   }
 }
