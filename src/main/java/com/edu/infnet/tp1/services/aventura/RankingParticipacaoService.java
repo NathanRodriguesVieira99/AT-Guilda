@@ -2,6 +2,7 @@ package com.edu.infnet.tp1.services.aventura;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,11 @@ public class RankingParticipacaoService {
   private final ParticipacaoMissaoRepository participacaoRepository;
 
   public List<RankingParticipacaoDto> exec() {
+    var todasParticipacoes = participacaoRepository.findAll();
+
     return aventureiroRepository.findAll().stream()
         .map(aventureiro -> {
-          var participacoes = participacaoRepository.findAll().stream()
+          var participacoes = todasParticipacoes.stream()
               .filter(p -> p.getAventureiro().getId().equals(aventureiro.getId()))
               .toList();
 
@@ -40,6 +43,12 @@ public class RankingParticipacaoService {
               soma,
               destaques);
         })
-        .toList();
+        .sorted((a, b) -> {
+          int compTotal = Integer.compare(b.totalParticipacoes(), a.totalParticipacoes());
+          if (compTotal != 0)
+            return compTotal;
+          return b.somaRecompensas().compareTo(a.somaRecompensas());
+        })
+        .collect(Collectors.toList());
   }
 }
