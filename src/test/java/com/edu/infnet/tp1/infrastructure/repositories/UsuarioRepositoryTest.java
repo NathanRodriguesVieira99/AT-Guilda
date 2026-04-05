@@ -1,4 +1,4 @@
-package com.edu.infnet.tp1.repositories;
+package com.edu.infnet.tp1.infrastructure.repositories;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
