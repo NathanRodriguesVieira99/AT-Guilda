@@ -7,6 +7,11 @@
 GET {{BASE_URL}}/health
 
 ###
+
+GET {{BASE_URL}}/missoes/top15dias
+Content-Type: application/json
+
+###
 # @name Registrar_Aventureiro
 POST {{BASE_URL}}/aventureiros/create
 Content-Type: application/json
@@ -27,39 +32,11 @@ Content-Type: application/json
 
 ###
 
-# @name Buscar_Aventureiro_Por_ID
-GET {{BASE_URL}}/aventureiros/{{ID}}
-
-###
-
 # @name Listar_Aventureiros
 # Query Params 👇
 # ?page=0&size=10&classe=LADINO&ativo=true&nivelMinimo=1
 GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=LADINO&ativo=true&nivelMinimo=1
 
-###
-
-# @name Atualizar_Aventureiro
-PATCH  {{BASE_URL}}/aventureiros/{{ID}}
-Content-Type: application/json
-
-{
-  "nome": "Perna Longa",
-  "classe": "GUERREIRO",
-  "nivel":30 
-}
-
-###
-
-# @name Definir_Companheiro
-POST {{BASE_URL}}/companheiros/create/{{ID}}
-Content-Type: application/json
-
-{
-"nome": "Oddy",
-"especie": "CORUJA", 
-"lealdade": 70
-}
 ###
 
 # @name Remover_Companheiro
@@ -68,18 +45,8 @@ Content-Type: application/json
 
 ###
 
-# @name Encerrar_Vínculo_Guilda
-PATCH {{BASE_URL}}/aventureiros/guilda/remove/{{ID}}
-
-###
-
 # @name Recrutar_Novamente
 PATCH {{BASE_URL}}/aventureiros/guilda/recruit/{{ID}}
-
-###
-
-# @name Buscar_Aventureiro_Por_Nome
-GET {{BASE_URL}}/aventureiros/buscar?nome=Perna&page=0&size=10
 
 ###
 
