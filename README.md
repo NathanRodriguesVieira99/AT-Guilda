@@ -1,4 +1,4 @@
-# RPG Guild API
+# Guilda API
 
 API REST para gerenciamento da Guilda de Aventureiros —missões, aventureiros e painel tático operacional.
 
@@ -18,7 +18,7 @@ API REST para gerenciamento da Guilda de Aventureiros —missões, aventureiros 
 
 ## Índice
 
-- [RPG Guild API](#rpg-guild-api)
+- [Guilda API](#guilda-api)
   - [Tecnologias](#tecnologias)
   - [Índice](#índice)
   - [Pré-requisitos](#pré-requisitos)
@@ -36,6 +36,8 @@ API REST para gerenciamento da Guilda de Aventureiros —missões, aventureiros 
     - [Missões](#missões)
   - [Tratamento de erros](#tratamento-de-erros)
   - [Estrutura do projeto](#estrutura-do-projeto)
+  - [Elasticsearch (Busca em Loja da Guilda)](#elasticsearch-busca-em-loja-da-guilda)
+    - [Endpoints](#endpoints-1)
   - [Cache](#cache)
 
 ---
@@ -75,8 +77,8 @@ cd .. && ./mvnw spring-boot:run
 ```
 presentation/     → Controllers (REST) e DTOs
 application/      → Services (lógica de negócio)
-infrastructure/   → Repositories (acesso a dados)
-domain/           → Entities, Enums, Value Objects
+infrastructure/   → Repositories e acesso ao ElasticSearch
+domain/           → Entidades (models) e Enums
 shared/           → Exceptions e Error handling
 ```
 
@@ -221,17 +223,20 @@ tp1-spring/
 ├── src/main/java/com/edu/infnet/tp1/
 │   ├── application/services/        # Lógica de negócio
 │   │   ├── aventura/
-│   │   └── painelTaticoMissao/
+│   │   ├── painelTaticoMissao/
+│   │   └── elastic/
 │   ├── domain/
 │   │   ├── enums/                  # Classes, Especies, StatusMissao...
 │   │   └── models/                 # Entidades JPA
 │   │       ├── aventura/            # Aventureiro, Missao, Companheiro...
 │   │       ├── organizacao/         # Usuario, Organizacao, Role...
+│   │       ├── elastic/             # LojaGuildaDocument
 │   │       └── painelTaticoMissao/  # View de analytics
 │   ├── infrastructure/repositories/ # JPA Repositories
 │   ├── presentation/controllers/    # REST Controllers
 │   │   ├── aventura/
 │   │   ├── painelTaticoMissao/
+│   │   ├── elastic/
 │   │   └── HealthCheck.java
 │   └── shared/                     # Exceções, Error handling
 ├── src/main/resources/
@@ -249,6 +254,57 @@ tp1-spring/
 | `aventura`  | Domínio principal (Aventureiro, Missao) |
 | `audit`     | Domínio legado (Usuario, Organizacao)   |
 | `operacoes` | Analytics (vw_painel_tatico_missao)     |
+
+---
+
+## Elasticsearch (Busca em Loja da Guilda)
+
+A aplicação utiliza **Elasticsearch** para busca textual em produtos da loja da guilda. Os dados são indexados no índice `guilda_loja`.
+
+### Endpoints
+
+| Método | Rota                            | Descrição                    |
+| ------ | ------------------------------- | ---------------------------- |
+| GET    | `/api/produtos/busca/nome`      | Busca produtos por nome      |
+| GET    | `/api/produtos/busca/descricao` | Busca produtos por descrição |
+
+**Parâmetros:**
+
+| Parâmetro | Tipo   | Descrição                    |
+| --------- | ------ | ---------------------------- |
+| `termo`   | String | Termo de busca (obrigatório) |
+
+**Exemplo de uso:**
+
+```bash
+# Buscar produtos por nome
+curl "http://localhost:8080/api/produtos/busca/nome?termo=espada"
+
+# Buscar produtos por descrição
+curl "http://localhost:8080/api/produtos/busca/descricao?termo=magico"
+```
+
+**Resposta:**
+
+```json
+[
+  {
+    "id": "123",
+    "nome": "Espada Longa",
+    "descricao": "Espada mágica de alto poder",
+    "preco": 1500.0
+  }
+]
+```
+
+**Modelo do documento (`LojaGuildaDocument`):**
+
+| Campo       | Tipo   | Descrição            |
+| ----------- | ------ | -------------------- |
+| `id`        | String | Identificador único  |
+| `nome`      | String | Nome do produto      |
+| `descricao` | String | Descrição do produto |
+| `preco`     | Double | Preço em ouro        |
 
 ---
 
