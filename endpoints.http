@@ -50,3 +50,23 @@ GET {{BASE_URL}}/produtos/busca/faixa-preco?min=10&max=50
 GET {{BASE_URL}}/produtos/busca/avancada?categoria=armas&raridade=lendario&min=500&max=3000
 
 ###
+
+# @name Busca_Agregada_Por_Categoria
+GET {{BASE_URL}}/produtos/agregacoes/por-categoria
+
+###
+
+# @name Busca_Agregada_Por_Raridade
+GET {{BASE_URL}}/produtos/agregacoes/por-raridade
+
+###
+
+# @name Busca_Agregada_Por_Preco_Médio
+GET {{BASE_URL}}/produtos/agregacoes/preco-medio
+
+###
+
+# @name Busca_Agregada_Por_Faixas_De_Preco
+GET {{BASE_URL}}/produtos/agregacoes/faixas-preco
+
+###
