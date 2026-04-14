@@ -13,8 +13,23 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class LojaGuildaAgregacaoPorFaixaDePrecosService {
+public class LojaGuildaAgregacaoService {
   private final ElasticsearchClient client;
+
+  public Map<String, Long> quantidadePorCategoria() throws IOException {
+    SearchResponse<Void> response = client.search(
+        s -> s.index("guilda_loja")
+            .size(0)
+            .aggregations("por_categoria", a -> a.terms(t -> t.field("categoria"))),
+        Void.class);
+    return response.aggregations()
+        .get("por_categoria")
+        .sterms()
+        .buckets().array().stream()
+        .collect(Collectors.toMap(
+            b -> b.key().stringValue(),
+            b -> b.docCount()));
+  }
 
   public Map<String, Long> buscarFaixasDePreco() throws IOException {
     SearchResponse<Void> response = client.search(
@@ -41,5 +56,36 @@ public class LojaGuildaAgregacaoPorFaixaDePrecosService {
           return r.key();
         },
             r -> r.docCount()));
+  }
+
+  public Double buscarPrecoMedioProdutos() throws IOException {
+    SearchResponse<Void> response = client.search(
+        s -> s.index("guilda_loja")
+            .size(0)
+            .aggregations("preco_medio", a -> a.avg(t -> t.field("preco"))),
+        Void.class);
+
+    double valorArredondado = Math.round(response.aggregations()
+        .get("preco_medio")
+        .avg()
+        .value() * 100.0) / 100.0;
+
+    return valorArredondado;
+  }
+
+  public Map<String, Long> quantidadePorRaridade() throws IOException {
+    SearchResponse<Void> response = client.search(
+        s -> s.index("guilda_loja")
+            .size(0)
+            .aggregations("por_raridade", a -> a.terms(t -> t.field("raridade"))),
+        Void.class);
+
+    return response.aggregations()
+        .get("por_raridade")
+        .sterms()
+        .buckets().array().stream()
+        .collect(Collectors.toMap(
+            b -> b.key().stringValue(),
+            b -> b.docCount()));
   }
 }

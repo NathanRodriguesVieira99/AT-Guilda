@@ -13,11 +13,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class DefinirCompanheiroService {
+public class CompanheiroService {
   private final AventureiroRepository aventureiroRepository;
   private final CompanheiroRepository companheiroRepository;
 
-  public Companheiro exec(Long id, Companheiro companheiro) {
+  public Companheiro criarCompanheiro(Long id, Companheiro companheiro) {
     Aventureiro aventureiro = aventureiroRepository.findById(id).orElseThrow(() -> new AventureiroNotFoundException());
 
     if (companheiro.getNome() == null || companheiro.getNome().isBlank())
@@ -32,5 +32,17 @@ public class DefinirCompanheiroService {
     }
 
     return aventureiro.getCompanheiro();
+  }
+
+  public Aventureiro removerCompanheiro(Long id) {
+    Aventureiro aventureiro = aventureiroRepository.findById(id)
+        .orElseThrow(() -> new AventureiroNotFoundException());
+
+    if (aventureiro.getCompanheiro() != null) {
+      aventureiro.setCompanheiro(null);
+      return aventureiroRepository.save(aventureiro);
+    }
+
+    return aventureiro;
   }
 }
