@@ -11,11 +11,15 @@ import com.edu.infnet.tp1.infrastructure.repositories.aventura.AventureiroReposi
 import com.edu.infnet.tp1.infrastructure.repositories.aventura.ParticipacaoMissaoRepository;
 import com.edu.infnet.tp1.presentation.dtos.AtualizarAventureiroRequestDto;
 import com.edu.infnet.tp1.presentation.dtos.AventureiroDetalhesDto;
+import com.edu.infnet.tp1.presentation.dtos.AventureiroResponseDto;
 import com.edu.infnet.tp1.presentation.dtos.CompanheiroResponseDto;
 import com.edu.infnet.tp1.presentation.dtos.PaginationQueryDto;
+import com.edu.infnet.tp1.presentation.dtos.PaginationResponseDto;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroInvalidParamsException;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroNotFoundException;
 import com.edu.infnet.tp1.shared.exceptions.InvalidQueryParamException;
+import com.edu.infnet.tp1.shared.mappers.AventureiroResponseDtoMapper;
+import com.edu.infnet.tp1.shared.mappers.PaginationResponseDtoMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,12 +29,14 @@ public class AventuraService {
   private final AventureiroRepository aventureiroRepository;
   private final ParticipacaoMissaoRepository participacaoMissaoRepository;
 
-  public List<Aventureiro> buscarAventureiroPorNome(String nome, int page, int size) {
+  public List<AventureiroResponseDto> buscarAventureiroPorNome(String nome, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
-    return aventureiroRepository.findByNomeContaining(nome, pageable).getContent();
+    return aventureiroRepository.findByNomeContaining(nome, pageable).getContent().stream()
+        .map(AventureiroResponseDtoMapper::toAventureiroResponseDto).toList();
+
   }
 
-  public Aventureiro atualizarAventureiro(Long id, AtualizarAventureiroRequestDto aventureiroAtualizado) {
+  public AventureiroResponseDto atualizarAventureiro(Long id, AtualizarAventureiroRequestDto aventureiroAtualizado) {
     Aventureiro aventureiro = aventureiroRepository.findById(id)
         .orElseThrow(() -> new AventureiroNotFoundException());
 
@@ -43,11 +49,41 @@ public class AventuraService {
     if (aventureiroAtualizado.nivel() != null)
       aventureiro.setNivel(aventureiroAtualizado.nivel().intValue());
 
-    return aventureiroRepository.save(aventureiro);
+    Aventureiro aventuereiroAtualizado = aventureiroRepository.save(aventureiro);
+    return AventureiroResponseDtoMapper.toAventureiroResponseDto(aventuereiroAtualizado);
   }
 
   public Aventureiro buscarAventureiroPorId(Long id) {
     return aventureiroRepository.findById(id).orElseThrow(() -> new AventureiroNotFoundException());
+  }
+
+  public AventureiroResponseDto buscarAventureiroResponsePorId(Long id) {
+    Aventureiro aventureiro = buscarAventureiroPorId(id);
+    return AventureiroResponseDtoMapper.toAventureiroResponseDto(aventureiro);
+  }
+
+  public List<PaginationResponseDto> listarAventureiros(PaginationQueryDto params) {
+    if (params.page() < 0) {
+      throw new InvalidQueryParamException();
+    }
+
+    if (params.size() < 1 || params.size() > 50) {
+      throw new InvalidQueryParamException();
+    }
+
+    if (params.ativo() != null && !params.ativo()) {
+      throw new InvalidQueryParamException();
+    }
+
+    if (params.nivelMinimo() != null && params.nivelMinimo() <= 0) {
+      throw new InvalidQueryParamException();
+    }
+
+    Pageable pageable = PageRequest.of(params.page(), params.size());
+
+    return aventureiroRepository.findAll(pageable).getContent().stream()
+      .map(PaginationResponseDtoMapper::toPaginationResponseDto)
+        .toList();
   }
 
   public Aventureiro encerrarVinculoGuilda(Long id) {
@@ -60,27 +96,6 @@ public class AventuraService {
     }
 
     throw new AventureiroNotFoundException();
-  }
-
-  public List<Aventureiro> listarAventureiros(PaginationQueryDto params) {
-    if (params.page() < 0) {
-      throw new InvalidQueryParamException();
-    }
-
-    if (params.size() < 1 || params.size() > 50)
-      throw new InvalidQueryParamException();
-
-    if (params.ativo() != true) {
-      throw new InvalidQueryParamException();
-    }
-
-    if (params.nivelMinimo() <= 0) {
-      throw new InvalidQueryParamException();
-    }
-
-    Pageable pageable = PageRequest.of(params.page(), params.size());
-
-    return aventureiroRepository.findAll(pageable).getContent();
   }
 
   public int contarAventureiros(PaginationQueryDto params) {
@@ -98,7 +113,7 @@ public class AventuraService {
     throw new AventureiroNotFoundException();
   }
 
-  public Aventureiro exec(Aventureiro aventureiro) {
+  public AventureiroResponseDto registrarAventureiro(Aventureiro aventureiro) {
     if (aventureiro.getNome() == null || aventureiro.getNome().isBlank())
       throw new AventureiroInvalidParamsException();
 
@@ -117,7 +132,9 @@ public class AventuraService {
     aventureiro.setAtivo(true);
     aventureiro.setCompanheiro(null);
 
-    return aventureiroRepository.save(aventureiro);
+    Aventureiro aventureiroCriado = aventureiroRepository.save(aventureiro);
+
+    return AventureiroResponseDtoMapper.toAventureiroResponseDto(aventureiroCriado);
   }
 
   public AventureiroDetalhesDto visualizarAventureiroCompleto(Long id) {
@@ -148,4 +165,5 @@ public class AventuraService {
         totalParticipacoes,
         ultimaMissao);
   }
+
 }
