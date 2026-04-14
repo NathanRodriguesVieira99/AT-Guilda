@@ -6,8 +6,10 @@ import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
 import com.edu.infnet.tp1.domain.models.aventura.Companheiro;
 import com.edu.infnet.tp1.infrastructure.repositories.aventura.AventureiroRepository;
 import com.edu.infnet.tp1.infrastructure.repositories.aventura.CompanheiroRepository;
+import com.edu.infnet.tp1.presentation.dtos.CompanheiroResponseDto;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroNotFoundException;
 import com.edu.infnet.tp1.shared.exceptions.CompanheiroInvalidParamsException;
+import com.edu.infnet.tp1.shared.mappers.CompanheiroResponseDtoMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +19,7 @@ public class CompanheiroService {
   private final AventureiroRepository aventureiroRepository;
   private final CompanheiroRepository companheiroRepository;
 
-  public Companheiro criarCompanheiro(Long id, Companheiro companheiro) {
+  public CompanheiroResponseDto criarCompanheiro(Long id, Companheiro companheiro) {
     Aventureiro aventureiro = aventureiroRepository.findById(id).orElseThrow(() -> new AventureiroNotFoundException());
 
     if (companheiro.getNome() == null || companheiro.getNome().isBlank())
@@ -28,10 +30,12 @@ public class CompanheiroService {
 
     if (aventureiro.getCompanheiro() == null) {
       companheiro.setAventureiro(aventureiro);
-      return companheiroRepository.save(companheiro);
+      Companheiro companheiroCriado = companheiroRepository.save(companheiro);
+      return CompanheiroResponseDtoMapper.toCompanheiroResponseDto(companheiroCriado);
     }
 
-    return aventureiro.getCompanheiro();
+    Companheiro companheiroRetornado = aventureiro.getCompanheiro();
+    return CompanheiroResponseDtoMapper.toCompanheiroResponseDto(companheiroRetornado);
   }
 
   public Aventureiro removerCompanheiro(Long id) {
