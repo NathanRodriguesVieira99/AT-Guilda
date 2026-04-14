@@ -1,7 +1,6 @@
 package com.edu.infnet.tp1.presentation.dtos;
 
 import com.edu.infnet.tp1.domain.enums.Classes;
-import com.edu.infnet.tp1.domain.models.aventura.Companheiro;
 
 // DTO -> Para resposta das rotas GET com filtros e pagination (retorna um aventureiro basicamente)
 public record PaginationResponseDto(
@@ -10,5 +9,5 @@ public record PaginationResponseDto(
     Classes classe,
     Number nivel,
     Boolean ativo,
-    Companheiro companheiro) {
+    CompanheiroResponseDto companheiro) {
 }
