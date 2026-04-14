@@ -18,6 +18,7 @@ import com.edu.infnet.tp1.application.services.aventura.AventuraService;
 import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
 import com.edu.infnet.tp1.presentation.dtos.AtualizarAventureiroRequestDto;
 import com.edu.infnet.tp1.presentation.dtos.AventureiroDetalhesDto;
+import com.edu.infnet.tp1.presentation.dtos.AventureiroResponseDto;
 import com.edu.infnet.tp1.presentation.dtos.PaginationQueryDto;
 import com.edu.infnet.tp1.presentation.dtos.PaginationResponseDto;
 
@@ -30,15 +31,15 @@ public class AventuraController {
   private final AventuraService aventuraService;
 
   @PatchMapping("/{id}")
-  public ResponseEntity<?> atualizarDadosAventureiro(
+  public ResponseEntity<AventureiroResponseDto> atualizarDadosAventureiro(
       @PathVariable Long id,
       @RequestBody AtualizarAventureiroRequestDto aventureiroAtualizado) {
-    Aventureiro resultado = aventuraService.atualizarAventureiro(id, aventureiroAtualizado);
+    AventureiroResponseDto resultado = aventuraService.atualizarAventureiro(id, aventureiroAtualizado);
     return ResponseEntity.ok().body(resultado);
   }
 
   @GetMapping("/buscar")
-  public ResponseEntity<List<Aventureiro>> buscar(
+  public ResponseEntity<List<AventureiroResponseDto>> buscar(
       @RequestParam String nome,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
@@ -46,19 +47,25 @@ public class AventuraController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> buscarAventureiroPorId(@PathVariable Long id) {
-    Aventureiro aventureiro = aventuraService.buscarAventureiroPorId(id);
-    return ResponseEntity.status(HttpStatus.OK).body(aventureiro);
+  public ResponseEntity<AventureiroResponseDto> buscarAventureiroPorId(@PathVariable Long id) {
+    AventureiroResponseDto response = aventuraService.buscarAventureiroResponsePorId(id);
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
-  @PatchMapping("/remove/{id}")
+  @PatchMapping("/guilda/remove/{id}")
   public ResponseEntity<?> encerrarVinculoGuilda(@PathVariable Long id) {
     Aventureiro aventureiroAtivo = aventuraService.encerrarVinculoGuilda(id);
     return ResponseEntity.status(HttpStatus.OK).body(aventureiroAtivo);
   }
 
+  @PatchMapping("/guilda/recruit/{id}")
+  public ResponseEntity<?> recrutarNovamente(@PathVariable Long id) {
+    Aventureiro aventureiroInativo = aventuraService.recrutarNovamente(id);
+    return ResponseEntity.status(HttpStatus.OK).body(aventureiroInativo);
+  }
+
   @GetMapping()
-  public ResponseEntity<?> listarAventureiros(
+  public ResponseEntity<List<PaginationResponseDto>> listarAventureiros(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
       @RequestParam(required = false) String classe,
@@ -66,17 +73,7 @@ public class AventuraController {
       @RequestParam(required = false) Integer nivelMinimo) {
     PaginationQueryDto params = new PaginationQueryDto(page, size, classe, ativo, nivelMinimo);
 
-    List<Aventureiro> resultado = aventuraService.listarAventureiros(params);
-
-    List<PaginationResponseDto> result = resultado.stream()
-        .map(aventureiro -> new PaginationResponseDto(
-            aventureiro.getId(),
-            aventureiro.getNome(),
-            aventureiro.getClasse(),
-            aventureiro.getNivel(),
-            aventureiro.isAtivo(),
-            aventureiro.getCompanheiro()))
-        .toList();
+    List<PaginationResponseDto> result = aventuraService.listarAventureiros(params);
 
     int totalAventureiros = aventuraService.contarAventureiros(params);
 
@@ -98,15 +95,9 @@ public class AventuraController {
     return ResponseEntity.ok(resultado);
   }
 
-  @PatchMapping("/recruit/{id}")
-  public ResponseEntity<?> recrutarNovamente(@PathVariable Long id) {
-    Aventureiro aventureiroInativo = aventuraService.recrutarNovamente(id);
-    return ResponseEntity.status(HttpStatus.OK).body(aventureiroInativo);
-  }
-
   @PostMapping("/create")
-  public ResponseEntity<?> registrarAventureiro(@RequestBody Aventureiro aventureiro) {
-    Aventureiro novoAventureiro = aventuraService.exec(aventureiro);
+  public ResponseEntity<AventureiroResponseDto> registrarAventureiro(@RequestBody Aventureiro aventureiro) {
+    AventureiroResponseDto novoAventureiro = aventuraService.registrarAventureiro(aventureiro);
     return ResponseEntity.status(HttpStatus.CREATED).body(novoAventureiro);
   }
 }
