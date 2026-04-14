@@ -10,14 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaComFiltrosService;
-import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaCombinadaService;
-import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaFaixaDePrecoService;
-import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaFuzzyService;
-import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaMulticampoService;
-import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaPorDescricaoService;
-import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaPorFraseExataService;
-import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaPorNomeService;
+import com.edu.infnet.tp1.application.services.elastic.LojaGuildaBuscaService;
 import com.edu.infnet.tp1.presentation.dtos.elastic.ProdutoRetornadoDto;
 
 import lombok.RequiredArgsConstructor;
@@ -26,14 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/produtos/busca")
 @RequiredArgsConstructor
 public class LojaGuildaBuscaController {
-  private final LojaGuildaBuscaCombinadaService lojaGuildaBuscaCombinadaService;
-  private final LojaGuildaBuscaComFiltrosService lojaGuildaBuscaComFiltrosService;
-  private final LojaGuildaBuscaFaixaDePrecoService lojaGuildaBuscaFaixaDePrecoService;
-  private final LojaGuildaBuscaFuzzyService lojaGuildaBuscaFuzzyService;
-  private final LojaGuildaBuscaMulticampoService lojaGuildaBuscaMulticampoService;
-  private final LojaGuildaBuscaPorDescricaoService lojaGuildaBuscaPorDescricaoService;
-  private final LojaGuildaBuscaPorFraseExataService lojaGuildaBuscaPorFraseExataService;
-  private final LojaGuildaBuscaPorNomeService lojaGuildaBuscaPorNomeService;
+  private final LojaGuildaBuscaService lojaGuildaBuscaService;
 
   @GetMapping("/avancada")
   public ResponseEntity<List<ProdutoRetornadoDto>> buscaAvancada(
@@ -41,46 +27,46 @@ public class LojaGuildaBuscaController {
       @RequestParam String categoria,
       @RequestParam BigDecimal min,
       @RequestParam BigDecimal max) throws IOException {
-    return ResponseEntity.ok(lojaGuildaBuscaCombinadaService.buscaCombinada(raridade, categoria, min, max));
+    return ResponseEntity.ok(lojaGuildaBuscaService.buscaCombinada(raridade, categoria, min, max));
   }
 
   @GetMapping("com-filtro")
   public ResponseEntity<List<ProdutoRetornadoDto>> buscarPorNome(
       @RequestParam String termo,
       @RequestParam String categoria) throws IOException {
-    return ResponseEntity.ok(lojaGuildaBuscaComFiltrosService.buscarComFiltros(termo, categoria));
+    return ResponseEntity.ok(lojaGuildaBuscaService.buscarComFiltros(termo, categoria));
   }
 
   @GetMapping("faixa-preco")
   public ResponseEntity<List<ProdutoRetornadoDto>> buscarFuzzy(
       @RequestParam BigDecimal min,
       @RequestParam BigDecimal max) throws IOException {
-    return ResponseEntity.ok(lojaGuildaBuscaFaixaDePrecoService.buscarFaixaPreco(min, max));
+    return ResponseEntity.ok(lojaGuildaBuscaService.buscarFaixaPreco(min, max));
   }
 
   @GetMapping("fuzzy")
   public ResponseEntity<List<ProdutoRetornadoDto>> buscarFuzzy(@RequestParam String termo) throws IOException {
-    return ResponseEntity.ok(lojaGuildaBuscaFuzzyService.buscarFuzzy(termo));
+    return ResponseEntity.ok(lojaGuildaBuscaService.buscarFuzzy(termo));
   }
 
   @GetMapping("multicampos")
   public ResponseEntity<List<ProdutoRetornadoDto>> buscarMulticampo(@RequestParam String termo) throws IOException {
-    return ResponseEntity.ok(lojaGuildaBuscaMulticampoService.buscarMulticampo(termo));
+    return ResponseEntity.ok(lojaGuildaBuscaService.buscarMulticampo(termo));
   }
 
   @GetMapping("descricao")
   public ResponseEntity<List<ProdutoRetornadoDto>> buscarPorDescricao(@RequestParam String termo) throws IOException {
-    return ResponseEntity.ok(lojaGuildaBuscaPorDescricaoService.buscarPorDescricao(termo));
+    return ResponseEntity.ok(lojaGuildaBuscaService.buscarPorDescricao(termo));
   }
 
   @GetMapping("frase")
   public ResponseEntity<List<ProdutoRetornadoDto>> buscarPorFraseExata(@RequestParam String termo) throws IOException {
-    return ResponseEntity.ok(lojaGuildaBuscaPorFraseExataService.buscarPorFraseExata(termo));
+    return ResponseEntity.ok(lojaGuildaBuscaService.buscarPorFraseExata(termo));
   }
 
   @GetMapping("nome")
   public ResponseEntity<List<ProdutoRetornadoDto>> buscarPorNome(@RequestParam String termo) throws IOException {
-    return ResponseEntity.ok(lojaGuildaBuscaPorNomeService.buscarPorNome(termo));
+    return ResponseEntity.ok(lojaGuildaBuscaService.buscarPorNome(termo));
   }
 
 }
