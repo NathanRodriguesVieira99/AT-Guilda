@@ -6,7 +6,7 @@ import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
 import com.edu.infnet.tp1.domain.models.aventura.Companheiro;
 import com.edu.infnet.tp1.infrastructure.repositories.aventura.AventureiroRepository;
 import com.edu.infnet.tp1.infrastructure.repositories.aventura.CompanheiroRepository;
-import com.edu.infnet.tp1.presentation.dtos.CompanheiroResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.companheiro.CompanheiroResponseDto;
 import com.edu.infnet.tp1.shared.errors.exceptions.InvalidParamsException;
 import com.edu.infnet.tp1.shared.errors.exceptions.ResourceNotFoundException;
 import com.edu.infnet.tp1.shared.mappers.CompanheiroResponseDtoMapper;

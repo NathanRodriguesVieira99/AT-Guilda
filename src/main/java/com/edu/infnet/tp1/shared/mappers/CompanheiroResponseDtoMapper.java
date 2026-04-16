@@ -1,7 +1,7 @@
 package com.edu.infnet.tp1.shared.mappers;
 
 import com.edu.infnet.tp1.domain.models.aventura.Companheiro;
-import com.edu.infnet.tp1.presentation.dtos.CompanheiroResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.companheiro.CompanheiroResponseDto;
 
 public class CompanheiroResponseDtoMapper {
   /*

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.edu.infnet.tp1.application.services.aventura.CompanheiroService;
 import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
 import com.edu.infnet.tp1.domain.models.aventura.Companheiro;
-import com.edu.infnet.tp1.presentation.dtos.CompanheiroResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.companheiro.CompanheiroResponseDto;
 
 import lombok.RequiredArgsConstructor;
 

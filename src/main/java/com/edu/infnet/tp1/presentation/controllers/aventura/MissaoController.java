@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.infnet.tp1.application.services.aventura.MissaoService;
 import com.edu.infnet.tp1.domain.models.aventura.Missao;
-import com.edu.infnet.tp1.presentation.dtos.MissaoDetalhesDto;
-import com.edu.infnet.tp1.presentation.dtos.RankingParticipacaoDto;
-import com.edu.infnet.tp1.presentation.dtos.RelatorioMissaoDto;
+import com.edu.infnet.tp1.presentation.dtos.missao.MissaoDetalhesDto;
+import com.edu.infnet.tp1.presentation.dtos.missao.RankingParticipacaoDto;
+import com.edu.infnet.tp1.presentation.dtos.missao.RelatorioMissaoDto;
 
 import lombok.RequiredArgsConstructor;
 
